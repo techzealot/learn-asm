@@ -1,4 +1,4 @@
-OBJS= cpuid.o cpuid2.o
+OBJS=cpuid.o cpuid2.o
 ELFS:= ${OBJS:%.o=%}
 ASFLAGS:= --gstabs --32
 LDFLAGS:= -m elf_i386
@@ -10,14 +10,17 @@ ${ELFS}: %: %.o
 	ld $< -o $@ ${LDFLAGS}
 
 cpuid2: cpuid2.o
-	ld ${LDFLAGS} -dynamic-linker /lib64/ld-linux-x86-64.so.2 cpuid2.o -o cpuid2
+	ld ${LDFLAGS} -dynamic-linker /lib/ld-linux.so.2 -lc cpuid2.o -o cpuid2
 
 # $< first dep $@ target
 ${OBJS}: %.o : %.S
 	as $< -o $@ ${ASFLAGS}
 
 run: ${ELFS}
-	./$<
+	for elf in $^;  \
+	do \
+	./$$elf ;\
+	done
 
 clean:
 #@ will hide command print

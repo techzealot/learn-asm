@@ -1,13 +1,22 @@
 MAKE=make
 #use shell to get dirs dynamic
-subdir:= chat4 
-.PHONY: all clean
+subdir:= chat4 chat5
+.PHONY: all clean run
 all:${subdir}
 # equals cd chat4 && ${MAKE}
-	${MAKE} -C $<
+	for d in $^ ;\
+	do \
+	${MAKE} -C $$d $@;\
+	done
 
 clean:${subdir}
-	${MAKE} -C $< $@
+	for d in $^ ;\
+	do \
+	${MAKE} -C $$d $@;\
+	done
 
 run:${subdir}
-	${MAKE} -C $< $@
+	for d in $^ ;\
+	do \
+	${MAKE} -C $$d $@;\
+	done
