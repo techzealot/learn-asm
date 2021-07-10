@@ -1,1 +1,1 @@
-###only support i386
+### only support i386
