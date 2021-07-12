@@ -1,16 +1,17 @@
-OBJS=cpuid.o cpuid2.o
-ELFS:= ${OBJS:%.o=%}
+OBJS=cpuid.o cpuid_c.o
+BIN:=bin
+ELFS:= ${OBJS:%.o=${BIN}/%}
 ASFLAGS:= --gstabs --32
 LDFLAGS:= -m elf_i386
 
 .phony: all run clean
 all: ${ELFS}
 
-${ELFS}: %: %.o
+${ELFS}: ${BIN}/%: %.o
 	ld $< -o $@ ${LDFLAGS}
-
-cpuid2: cpuid2.o
-	ld ${LDFLAGS} -dynamic-linker /lib/ld-linux.so.2 -lc cpuid2.o -o cpuid2
+# link libc when end with _c,override common link rule
+$(filter %_c,${ELFS}): ${BIN}/%: %.o
+	ld ${LDFLAGS} -dynamic-linker /lib/ld-linux.so.2 -lc $< -o $@
 
 # $< first dep $@ target
 ${OBJS}: %.o : %.S
