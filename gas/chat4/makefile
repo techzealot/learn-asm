@@ -17,7 +17,7 @@ ${OBJS}: %.o : %.S
 	as $< -o $@ ${ASFLAGS}
 
 run: ${ELFS}
-	for elf in $^;  \
+	@for elf in $^;  \
 	do \
 	./$$elf ;\
 	done
